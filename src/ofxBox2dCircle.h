@@ -18,6 +18,7 @@ public:
 	//------------------------------------------------
 	void setup(b2World * b2dworld, float x, float y, float radius);
 	void setup(b2World * b2dworld, ofVec2f &pts, float radius);
+	void setup(b2World * b2dworld, float radius);
 	
 	//------------------------------------------------
 	float getRadius();
@@ -34,17 +35,3 @@ public:
 	void addRepulsionForce(ofVec2f pt, float amt);
 
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-

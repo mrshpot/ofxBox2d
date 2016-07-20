@@ -136,7 +136,7 @@ void ofxBox2dPolygon::create(b2World * b2dworld) {
 	
 	// create the body from the world (1)
 	b2BodyDef		bd;
-	bd.type			= density <= 0.0 ? b2_staticBody : b2_dynamicBody;
+	this->setupBodyDef(bd);
 	body			= b2dworld->CreateBody(&bd);
 
 	if(bIsTriangulated) {
@@ -157,11 +157,8 @@ void ofxBox2dPolygon::create(b2World * b2dworld) {
 			verts[2].Set(c.x/OFX_BOX2D_SCALE, c.y/OFX_BOX2D_SCALE);
 			
 			shape.Set(verts, 3);
-			
-			fixture.density		= density;
-			fixture.restitution = bounce;
-			fixture.friction	= friction;
-			fixture.shape		= &shape;
+
+			this->setupFixture(fixture, &shape);
 			body->CreateFixture(&fixture);
 		}
 	
@@ -175,15 +172,9 @@ void ofxBox2dPolygon::create(b2World * b2dworld) {
         }
         b2PolygonShape shape;
         shape.Set(&verts[0], verts.size()-1);
-        
-        fixture.shape		= &shape;
-        fixture.density		= density;
-        fixture.restitution = bounce;
-        fixture.friction	= friction;
-        
+
+        this->setupFixture(fixture, &shape);
         body->CreateFixture(&fixture);
-    
-        
     }
     
     vector<ofPoint> pts = ofPolyline::getVertices();

@@ -15,8 +15,15 @@ ofxBox2dCircle::ofxBox2dCircle() {
 
 //------------------------------------------------
 void ofxBox2dCircle::setup(b2World * b2dworld, float x, float y, float radius) {
-	
-	
+	this->setInitialPos(x, y);
+	this->setup(b2dworld, radius);
+}
+
+void ofxBox2dCircle::setup(b2World * b2dworld, ofVec2f &pts, float radius) {
+	setup(b2dworld, pts.x, pts.y, radius);
+}
+
+void ofxBox2dCircle::setup(b2World *b2dworld, float radius) {
 	if(b2dworld == NULL) {
 		ofLog(OF_LOG_NOTICE, "ofxBox2dCircle :: setup : - must have a valid world -");
 		return;
@@ -28,24 +35,15 @@ void ofxBox2dCircle::setup(b2World * b2dworld, float x, float y, float radius) {
 	shape.m_p.SetZero();
 	shape.m_radius		= radius / OFX_BOX2D_SCALE;
 	this->radius		= radius;
-	
-	fixture.shape		= &shape;
-	fixture.density		= density;
-	fixture.friction	= friction;
-	fixture.restitution	= bounce;
-	
-	if(density == 0.f)	bodyDef.type	= b2_staticBody;
-	else				bodyDef.type	= b2_dynamicBody;
-	
-	bodyDef.position.Set(x/OFX_BOX2D_SCALE, y/OFX_BOX2D_SCALE);
+
+	this->setupFixture(fixture, &shape);
+
+	this->setupBodyDef(bodyDef);
 	
 	body  = b2dworld->CreateBody(&bodyDef);
 	body->CreateFixture(&fixture);
-    
-    alive = true;
-}
-void ofxBox2dCircle::setup(b2World * b2dworld, ofVec2f &pts, float radius) {
-    setup(b2dworld, pts.x, pts.y, radius);
+
+	alive = true;
 }
 
 //------------------------------------------------

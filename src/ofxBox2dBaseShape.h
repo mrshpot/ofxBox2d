@@ -17,6 +17,7 @@ public:
 	float			density;
 	float			bounce;
 	float			friction;
+	float initialX, initialY, initialAngle;
 	ofxBox2dBaseShape();	
 	
 	//----------------------------------------
@@ -71,7 +72,10 @@ public:
 	//------------------------------------------------ 
 	virtual void setPosition(float x, float y);
 	virtual void setPosition(ofVec2f p);
-	
+
+	void setInitialPos(float x, float y);
+	void setInitialAngle(float angle);
+
 	//------------------------------------------------ 
 	ofVec2f getPosition();
 	ofVec2f getB2DPosition();
@@ -104,11 +108,7 @@ public:
 	//------------------------------------------------
 	virtual void update();
 	virtual void draw();
-	
+
+	void setupFixture(b2FixtureDef &fixture, b2Shape *shape);
+	void setupBodyDef(b2BodyDef &bodyDef);
 };
-
-
-
-
-
-

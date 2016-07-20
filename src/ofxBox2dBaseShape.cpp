@@ -20,6 +20,10 @@ ofxBox2dBaseShape::ofxBox2dBaseShape() {
 	bounce		= 0.0;
 	friction	= 0.0;
 	bodyDef.allowSleep = true;
+
+	initialX = 0.0;
+	initialY = 0.0;
+	initialAngle = 0.0;
 }
 
 //----------------------------------------
@@ -194,6 +198,15 @@ void ofxBox2dBaseShape::setPosition(ofVec2f p) {
 	setPosition(p.x, p.y);
 }
 
+void ofxBox2dBaseShape::setInitialPos(float x, float y) {
+	this->initialX = x / OFX_BOX2D_SCALE;
+	this->initialY = y / OFX_BOX2D_SCALE;
+}
+
+void ofxBox2dBaseShape::setInitialAngle(float angle) {
+	this->initialAngle = angle;
+}
+
 //------------------------------------------------ 
 ofVec2f ofxBox2dBaseShape::getPosition() {
 	ofVec2f p;
@@ -293,3 +306,18 @@ void ofxBox2dBaseShape::addRepulsionForce(ofVec2f pt, float radius, float amt) {
 //------------------------------------------------
 void ofxBox2dBaseShape::update() { }
 void ofxBox2dBaseShape::draw() { }
+
+void ofxBox2dBaseShape::setupFixture(b2FixtureDef &fixture, b2Shape *shape) {
+	fixture.density = density;
+	fixture.restitution = bounce;
+	fixture.friction = friction;
+	fixture.shape = shape;
+}
+
+void ofxBox2dBaseShape::setupBodyDef(b2BodyDef &bodyDef) {
+	if(density == 0.f)	bodyDef.type	= b2_staticBody;
+	else				bodyDef.type	= b2_dynamicBody;
+
+	bodyDef.position.Set(initialX, initialY);
+	bodyDef.angle = initialAngle;
+}
