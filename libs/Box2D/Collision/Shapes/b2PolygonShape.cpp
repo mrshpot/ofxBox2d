@@ -117,13 +117,13 @@ static b2Vec2 ComputeCentroid(const b2Vec2* vs, int32 count)
 	return c;
 }
 
-void b2PolygonShape::Set(const b2Vec2* vertices, int32 count)
+bool b2PolygonShape::Set(const b2Vec2* vertices, int32 count)
 {
 	b2Assert(3 <= count && count <= b2_maxPolygonVertices);
 	if (count < 3)
 	{
 		SetAsBox(1.0f, 1.0f);
-		return;
+		return false;
 	}
 	
 	int32 n = b2Min(count, b2_maxPolygonVertices);
@@ -155,9 +155,9 @@ void b2PolygonShape::Set(const b2Vec2* vertices, int32 count)
 	if (n < 3)
 	{
 		// Polygon is degenerate.
-		b2Assert(false);
-		SetAsBox(1.0f, 1.0f);
-		return;
+		return false;
+		// SetAsBox(1.0f, 1.0f);
+		// return;
 	}
 
 	// Create the convex hull using the Gift wrapping algorithm
@@ -220,9 +220,9 @@ void b2PolygonShape::Set(const b2Vec2* vertices, int32 count)
 	if (m < 3)
 	{
 		// Polygon is degenerate.
-		b2Assert(false);
-		SetAsBox(1.0f, 1.0f);
-		return;
+		return false;
+		// SetAsBox(1.0f, 1.0f);
+		// return;
 	}
 
 	m_count = m;
@@ -246,6 +246,7 @@ void b2PolygonShape::Set(const b2Vec2* vertices, int32 count)
 
 	// Compute the polygon centroid.
 	m_centroid = ComputeCentroid(m_vertices, m);
+	return true;
 }
 
 bool b2PolygonShape::TestPoint(const b2Transform& xf, const b2Vec2& p) const
